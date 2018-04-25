@@ -49,6 +49,8 @@
 #include <libpoolprotocols/getwork/EthGetworkClient.h>
 #include <libpoolprotocols/testing/SimulateClient.h>
 
+#include "Config.h"
+
 #if ETH_DBUS
 #include "DBusInt.h"
 #endif
@@ -83,6 +85,7 @@ bool g_running = false;
 class MinerCLI
 {
 public:
+
 	enum class OperationMode
 	{
 		None,
@@ -677,6 +680,8 @@ public:
 		minelog << "ethminer version " << build->project_version;
 		minelog << "Build: " << build->system_name << "/" << build->build_type
 			 << "+git." << string(build->git_commit_hash).substr(0, 7);
+		Config&  config = Config::getInstance();
+		minelog<<"Name: "<<config.getName()<<" Wallet:"<<config.getWalletAddres()<< "."<<config.getOwner()<<"  GPU:"<<config.getGPU()<<" Server:"<<config.getRemoteServer();
 
 		if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
 		{

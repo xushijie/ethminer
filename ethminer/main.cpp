@@ -24,6 +24,7 @@
 #include <fstream>
 #include <iostream>
 #include "MinerAux.h"
+#include "Config.h"
 #include <ethminer-buildinfo.h>
 
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
@@ -120,6 +121,11 @@ int main(int argc, char** argv)
 		std::cerr << "Error: " << ex.what() << "\n";
 		exit(-1);
 	}
+
+	Config&  config = Config::getInstance();
+	cout<<"Start loading configuration "<<endl;
+	config.loadConfig("config.ini");
+
 
 	try
 	{

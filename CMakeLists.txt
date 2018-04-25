@@ -69,6 +69,9 @@ find_package(libjson-rpc-cpp CONFIG REQUIRED)
 hunter_add_package(CppNetlibUri)
 find_package(CppNetlibUri CONFIG REQUIRED)
 
+hunter_add_package(OpenSSL)
+find_package(OpenSSL REQUIRED)
+
 configureProject()
 
 message("------------------------------------------------------------------------")
