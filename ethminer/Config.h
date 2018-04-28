@@ -1,7 +1,9 @@
 #pragma once
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-
+#include <json/json.h>
+#include <unordered_map>
+#include <utility>
 #include <iostream>
 
 using namespace std;
@@ -11,8 +13,10 @@ private:
         string owner;
         string walletAddress;
         int gpu;
-        string server;
 
+        //Following two for the log submission
+        string server;
+        string port;
 private:
         Config(){
         }
@@ -53,6 +57,18 @@ public:
 
         string getRemoteServer(){
                 return server;
+        }
+
+        string getPort(){
+                return port;
+        }
+
+        void initJson(Json::Value& root){
+                root["name"] = name;
+                root["owner"] = owner;
+
+                root["walletAddress"] = walletAddress;
+                root["gpu"] = gpu;
         }
 
 };

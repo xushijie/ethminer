@@ -3,12 +3,19 @@ cmake_policy(SET CMP0015 NEW)
 aux_source_directory(. SRC_LIST)
 
 include_directories(BEFORE ..)
+include_directories(BEFORE ../beast/include/)
+include_directories (${JSONCPP_ROOT}/include/)
 
 set(EXECUTABLE ethminer)
 
 file(GLOB HEADERS "*.h")
 
-add_executable(${EXECUTABLE} ${SRC_LIST} ${HEADERS})
+add_executable(httpclient httpclient.cpp ${HEADERS})
+
+target_link_libraries(httpclient PRIVATE boost_system pthread)
+
+#add_executable(${EXECUTABLE} ${SRC_LIST} ${HEADERS})
+add_executable(${EXECUTABLE} main.cpp ${HEADERS})
 
 target_link_libraries(ethminer PRIVATE ethcore poolprotocols devcore ethminer-buildinfo)
 

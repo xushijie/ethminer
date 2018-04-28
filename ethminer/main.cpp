@@ -27,6 +27,13 @@
 #include "Config.h"
 #include <ethminer-buildinfo.h>
 
+#include <boost/beast/http.hpp>
+#include <boost/asio.hpp>
+#include <boost/lexical_cast.hpp>
+#include "libapicore/Api.h"
+#include <string>
+#include <json/json.h>
+
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
@@ -52,6 +59,16 @@ void help()
 		<< "     NO_COLOR - set to any value to disable color output. Unset to re-enable color output." << endl
 		;
 	exit(0);
+}
+
+void submitConfiguration()
+{
+	Config&  config = Config::getInstance();
+	Json::Value root;
+	config.initJson(root);
+	//string json = JSonUtil::map2json(map);
+	HttpApi::postData(JSonUtil::json2string(root));
+
 }
 
 void version()
@@ -125,7 +142,7 @@ int main(int argc, char** argv)
 	Config&  config = Config::getInstance();
 	cout<<"Start loading configuration "<<endl;
 	config.loadConfig("config.ini");
-
+	submitConfiguration();
 
 	try
 	{

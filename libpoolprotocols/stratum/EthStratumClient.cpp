@@ -4,6 +4,7 @@
 #include <ethminer-buildinfo.h>
 
 #include <ethash/ethash.hpp>
+#include <libapicore/Api.h>
 
 #ifdef _WIN32
 #include <wincrypt.h>
@@ -605,6 +606,10 @@ void EthStratumClient::hashrate_event_handler(const boost::system::error_code& e
 	else
 		async_write(*m_nonsecuresocket, m_requestBuffer,
 			boost::bind(&EthStratumClient::handleHashrateResponse, this, boost::asio::placeholders::error));
+
+	HttpApi::postData(json);
+
+
 }
 
 void EthStratumClient::work_timeout_handler(const boost::system::error_code& ec) {
