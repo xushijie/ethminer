@@ -35,7 +35,7 @@ public:
                 owner = pt.get<string>("config.owner");
                 walletAddress= pt.get<std::string>("config.walletAddress");
                 gpu = pt.get<int>("config.gpu");
-                server = pt.get<int>("config.server");
+                server = pt.get<string>("config.server");
         }
 
 

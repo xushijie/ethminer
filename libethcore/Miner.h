@@ -29,6 +29,7 @@
 #include <libdevcore/Log.h>
 #include <libdevcore/Worker.h>
 #include "EthashAux.h"
+#include "IJsonSerializer.hpp"
 
 #define MINER_WAIT_STATE_WORK	 1
 
@@ -93,7 +94,7 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 }
 
 /// Describes the progress of a mining operation.
-struct WorkingProgress
+ struct WorkingProgress: JsonSerializable
 {
 	uint64_t hashes = 0;		///< Total number of hashes computed.
 	uint64_t ms = 0;			///< Total number of milliseconds of mining thus far.
@@ -102,6 +103,25 @@ struct WorkingProgress
 	std::vector<uint64_t> minersHashes;
 	std::vector<HwMonitor> minerMonitors;
 	uint64_t minerRate(const uint64_t hashCount) const { return ms == 0 ? 0 : hashCount * 1000 / ms; }
+
+	void serialize(Json::Value& root){
+		float mh = rate() / 1000000.0f;
+		root["speed"] = to_string(mh)+"Mh/s" ;
+
+		Json::Value rates;
+		for (size_t i = 0; i < minersHashes.size(); ++i)
+			{
+				mh = minerRate(minersHashes[i]) / 1000000.0f;
+				Json::Value ele;
+				ele["Speed"] = to_string(mh)+"Mh/s";
+				rates.append(ele);
+			}
+		root["data"] = rates;
+	}
+
+	void deserialize(Json::Value& root){
+
+	}
 };
 
 inline std::ostream& operator<<(std::ostream& _out, WorkingProgress _p)

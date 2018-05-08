@@ -50,7 +50,7 @@
 #include <libpoolprotocols/testing/SimulateClient.h>
 
 #include "Config.h"
-
+#include "libethcore/IJsonSerializer.hpp"
 #if ETH_DBUS
 #include "DBusInt.h"
 #endif
@@ -914,7 +914,17 @@ private:
 
 		exit(0);
 	}
-	
+
+
+	void logMinerData(WorkingProgress p)
+	{
+
+		string json;
+		CJsonSerializerAPI::serialize(&p, json);
+		HttpApi::postData(json);
+	}
+
+
 	void doMiner()
 	{
 		map<string, Farm::SealerDescriptor> sealers;
@@ -978,6 +988,7 @@ private:
 				auto mp = f.miningProgress(m_show_hwmonitors, m_show_power);
 				minelog << mp << f.getSolutionStats() << f.farmLaunchedFormatted();
 
+				logMinerData(mp);
 #if ETH_DBUS
 				dbusint.send(toString(mp).data());
 #endif
