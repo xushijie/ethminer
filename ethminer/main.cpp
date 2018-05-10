@@ -142,6 +142,9 @@ int main(int argc, char** argv)
 	Config&  config = Config::getInstance();
 	cout<<"Start loading configuration "<<endl;
 	config.loadConfig("config.ini");
+
+	HttpApi::initialize(config.getRemoteServer(), config.getPort());
+
 	submitConfiguration();
 
 	try

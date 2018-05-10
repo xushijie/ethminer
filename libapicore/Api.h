@@ -7,6 +7,7 @@
 #include <json/json.h>
 #include "ethminer/Config.h"
 #include <unordered_map>
+#include <string>
 using namespace jsonrpc;
 using namespace dev;
 using namespace dev::eth;
@@ -21,15 +22,15 @@ private:
 	Farm &m_farm;
 };
 
-class HttpApi{
- public:
-	static bool postData(string json);
+namespace HttpApi{
+    bool postData(string json);
+    void initialize(string remoteHost, string port);
 
- private:
-	static  string remoteHost;
-	static  string port;
-	static  string url;
-};
+    extern string remoteHost;
+	extern string port;
+	const string url = "/api/miner";
+
+}
 
 class JSonUtil{
 public:

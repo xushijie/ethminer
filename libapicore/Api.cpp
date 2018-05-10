@@ -7,7 +7,7 @@
 #include <boost/asio/connect.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
-
+using namespace std;
 
 Api::Api(const int &port, Farm &farm): m_farm(farm)
 {
@@ -34,14 +34,27 @@ namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
 using namespace std;
 
+/*
 string HttpApi::remoteHost = Config::getInstance().getRemoteServer();
 string HttpApi::port = Config::getInstance().getPort();
 string HttpApi::url="/api/miner";
+*/
+namespace HttpApi{
+        string remoteHost = "";
+        string port = "";
+}
+
+void HttpApi::initialize(string configHost, string configPort)
+{
+        remoteHost = configHost;
+        port = configPort;
+}
+
 
 bool HttpApi::postData(string json)
 {
 	try{
-	        // The io_context is required for all I/O
+	    // The io_context is required for all I/O
         boost::asio::io_context ioc;
 
         // These objects perform our I/O

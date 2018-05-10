@@ -26,6 +26,8 @@
 #include <iostream>
 #include <string>
 
+#include "libapicore/Api.h"
+#include "Config.h"
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
@@ -33,9 +35,19 @@ using namespace std;
 // Performs an HTTP GET and prints the response
 int main(int argc, char** argv)
 {
+
+        Config&  config = Config::getInstance();
+        cout<<"Start loading configuration "<<endl;
+        config.loadConfig("config.ini");
+        HttpApi::initialize(config.getRemoteServer(), config.getPort());
+        cout<<"Server: "<<HttpApi::remoteHost<<"  port:"<<HttpApi::port<<endl;
+        HttpApi::postData("hello world");
+     /*
     try
     {
+
         // Check command line arguments.
+
         if(argc != 4 && argc != 5)
         {
             std::cerr <<
@@ -93,7 +105,6 @@ int main(int argc, char** argv)
         //
         if(ec && ec != boost::system::errc::not_connected)
             throw boost::system::system_error{ec};
-
         // If we get here then the connection is closed gracefully
     }
     catch(std::exception const& e)
@@ -101,5 +112,7 @@ int main(int argc, char** argv)
         std::cerr << "Error: " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
+
+     */
     return EXIT_SUCCESS;
 }
