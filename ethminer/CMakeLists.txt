@@ -17,7 +17,7 @@ file(GLOB HEADERS "*.h")
 #add_executable(${EXECUTABLE} ${SRC_LIST} ${HEADERS})
 add_executable(${EXECUTABLE} main.cpp ${HEADERS})
 
-target_link_libraries(ethminer PRIVATE ethcore poolprotocols devcore ethminer-buildinfo)
+target_link_libraries(ethminer PRIVATE ethcore poolprotocols devcore ethminer-buildinfo boost_system pthread)
 
 if(ETHDBUS)
 	find_package(PkgConfig)

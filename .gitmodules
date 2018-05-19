@@ -5,6 +5,3 @@
 	path = cmake/cable
 	url = https://github.com/ethereum/cable
 	branch = master
-[submodule "beast"]
-	path = beast
-	url = git@github.com:boostorg/beast.git
