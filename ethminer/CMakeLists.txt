@@ -10,9 +10,9 @@ set(EXECUTABLE ethminer)
 
 file(GLOB HEADERS "*.h")
 
-#add_executable(httpclient httpclient.cpp ${HEADERS})
+add_executable(httpclient httpclient.cpp ${HEADERS})
 
-#target_link_libraries(httpclient PRIVATE ethcore poolprotocols devcore ethminer-buildinfo boost_system pthread)
+target_link_libraries(httpclient PRIVATE ethcore poolprotocols devcore ethminer-buildinfo boost_system pthread)
 
 #add_executable(${EXECUTABLE} ${SRC_LIST} ${HEADERS})
 add_executable(${EXECUTABLE} main.cpp ${HEADERS})
@@ -30,7 +30,7 @@ endif()
 
 if(APICORE)
   target_link_libraries(ethminer PRIVATE apicore)
- # target_link_libraries(httpclient PRIVATE apicore)
+  target_link_libraries(httpclient PRIVATE apicore)
 endif()
 
 include(GNUInstallDirs)
