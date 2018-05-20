@@ -68,6 +68,7 @@ public:
         }
 
         void initJson(Json::Value& root){
+		root["type"] = 0;
                 root["name"] = name;
                 root["owner"] = owner;
 

@@ -107,7 +107,7 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 	void serialize(Json::Value& root){
 		float mh = rate() / 1000000.0f;
 		root["speed"] = to_string(mh)+"Mh/s" ;
-
+		root["type"]=1;
 		Json::Value rates;
 		for (size_t i = 0; i < minersHashes.size(); ++i)
 			{
