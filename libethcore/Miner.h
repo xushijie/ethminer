@@ -30,6 +30,7 @@
 #include <libdevcore/Worker.h>
 #include "EthashAux.h"
 #include "IJsonSerializer.hpp"
+#include "ethminer/Config.h"
 
 #define MINER_WAIT_STATE_WORK	 1
 
@@ -106,8 +107,11 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 
 	void serialize(Json::Value& root){
 		float mh = rate() / 1000000.0f;
+
 		root["speed"] = to_string(mh)+"Mh/s" ;
 		root["type"]=1;
+		root["client"] = Config::getInstance().getLocalIp();
+		root["name"] = Config::getInstance().getName();
 		Json::Value rates;
 		for (size_t i = 0; i < minersHashes.size(); ++i)
 			{

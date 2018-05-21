@@ -10,10 +10,14 @@
 using namespace std;
 class Config{
 private:
+        //Miner Hardware information
         string name;
-        string owner;
-        string walletAddress;
+        string localIp;
         int gpu;
+
+        //Both are owner information
+        string walletAddress;
+        string owner;
 
         //Following two for the log submission
         string server;
@@ -66,14 +70,24 @@ public:
         string getPort(){
                 return port;
         }
+        string getLocalIp(){
+                return localIp;
+        }
+
+        void setLocalIp(string localIpAddress){
+                localIp = localIpAddress;
+        }
 
         void initJson(Json::Value& root){
-		root["type"] = 0;
+                root["type"] = 0;
                 root["name"] = name;
                 root["owner"] = owner;
 
                 root["walletAddress"] = walletAddress;
                 root["gpu"] = gpu;
+
+                //
+                root["client"] = localIp;
         }
 
 };

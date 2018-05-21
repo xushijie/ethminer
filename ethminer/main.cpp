@@ -144,6 +144,8 @@ int main(int argc, char** argv)
 	config.loadConfig("config.ini");
 
 	HttpApi::initialize(config.getRemoteServer(), config.getPort());
+	string localIp = HttpApi::getLocalIp();
+	config.setLocalIp(localIp);
 
 	submitConfiguration();
 

@@ -24,6 +24,7 @@ private:
 
 namespace HttpApi{
     bool postData(string json);
+    string getLocalIp();
     void initialize(string remoteHost, string port);
 
     extern string remoteHost;

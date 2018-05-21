@@ -9,6 +9,8 @@
 #include <boost/asio/connect.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
+#include <boost/lexical_cast.hpp>
+
 using namespace std;
 
 Api::Api(const int &port, Farm &farm): m_farm(farm)
@@ -32,6 +34,7 @@ Api::Api(const int &port, Farm &farm): m_farm(farm)
 
 
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+namespace ip = boost::asio::ip;
 namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
 using namespace std;
@@ -52,6 +55,19 @@ void HttpApi::initialize(string configHost, string configPort)
         port = configPort;
 }
 
+string HttpApi::getLocalIp(){
+    boost::asio::io_service io_service;
+    ip::tcp::socket s(io_service);
+
+    using boost::lexical_cast;
+    // Connect to "google.com".
+    s.connect(
+              ip::tcp::endpoint(ip::address::from_string(remoteHost), lexical_cast<int>(port)));
+
+    string localIp = s.local_endpoint().address().to_string();
+    cout<< " Detect EthMiner Local IP "<<localIp<<endl;
+    return localIp;
+}
 
 bool HttpApi::postData(string json)
 {
