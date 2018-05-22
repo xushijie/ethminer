@@ -108,7 +108,7 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 	void serialize(Json::Value& root){
 		float mh = rate() / 1000000.0f;
 
-		root["speed"] = to_string(mh)+"Mh/s" ;
+		root["speed"] = mh;
 		root["type"]=1;
 		root["client"] = Config::getInstance().getLocalIp();
 		root["name"] = Config::getInstance().getName();
@@ -117,7 +117,7 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 			{
 				mh = minerRate(minersHashes[i]) / 1000000.0f;
 				Json::Value ele;
-				ele["Speed"] = to_string(mh)+"Mh/s";
+				ele["speed"] = mh;
 				rates.append(ele);
 			}
 		root["data"] = rates;
