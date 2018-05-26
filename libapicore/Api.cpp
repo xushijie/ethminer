@@ -34,6 +34,7 @@ Api::Api(const int &port, Farm &farm): m_farm(farm)
 
 
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+using udp = boost::asio::ip::udp;       // from <boost/asio/ip/tcp.hpp>
 namespace ip = boost::asio::ip;
 namespace http = boost::beast::http;    // from <boost/beast/http.hpp>
 
@@ -55,18 +56,35 @@ void HttpApi::initialize(string configHost, string configPort)
         port = configPort;
 }
 
+
+//https://stackoverflow.com/questions/212528/get-the-ip-address-of-the-machine/265978#265978
 string HttpApi::getLocalIp(){
+    try{
+    boost::asio::io_service netService;
+    udp::resolver   resolver(netService);
+    udp::resolver::query query(udp::v4(), "www.baidu.com", "");
+    udp::resolver::iterator endpoints = resolver.resolve(query);
+    udp::endpoint ep = *endpoints;
+    udp::socket socket(netService);
+    socket.connect(ep);
+    boost::asio::ip::address addr = socket.local_endpoint().address();
+    std::cout << "My IP according to google is: " << addr.to_string() << std::endl;
+    /*
     boost::asio::io_service io_service;
     ip::tcp::socket s(io_service);
 
     using boost::lexical_cast;
-    // Connect to "google.com".
     s.connect(
               ip::tcp::endpoint(ip::address::from_string(remoteHost), lexical_cast<int>(port)));
-
     string localIp = s.local_endpoint().address().to_string();
+    */
+    string localIp = addr.to_string();
     cout<< " Detect EthMiner Local IP "<<localIp<<endl;
     return localIp;
+    }catch(std::exception& e){
+        std::cerr<<"Failed to detect local IP: "<<e.what()<<endl;
+        return "127.0.0.1";
+    }
 }
 
 bool HttpApi::postData(string json)
