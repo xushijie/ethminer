@@ -68,8 +68,7 @@ string HttpApi::getLocalIp(){
     udp::socket socket(netService);
     socket.connect(ep);
     boost::asio::ip::address addr = socket.local_endpoint().address();
-    std::cout << "My IP according to google is: " << addr.to_string() << std::endl;
-    /*
+   /*
     boost::asio::io_service io_service;
     ip::tcp::socket s(io_service);
 
@@ -79,8 +78,7 @@ string HttpApi::getLocalIp(){
     string localIp = s.local_endpoint().address().to_string();
     */
     string localIp = addr.to_string();
-    cout<< " Detect EthMiner Local IP "<<localIp<<endl;
-    return localIp;
+   return localIp;
     }catch(std::exception& e){
         std::cerr<<"Failed to detect local IP: "<<e.what()<<endl;
         return "127.0.0.1";

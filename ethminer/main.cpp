@@ -31,6 +31,8 @@
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 #include "libapicore/Api.h"
+#include "libethash-cl/CLMiner.h"
+
 #include <string>
 #include <json/json.h>
 
@@ -142,11 +144,11 @@ int main(int argc, char** argv)
 	Config&  config = Config::getInstance();
 	cout<<"Start loading configuration "<<endl;
 	config.loadConfig("config.ini");
-
 	HttpApi::initialize(config.getRemoteServer(), config.getPort());
 	string localIp = HttpApi::getLocalIp();
+	config.setDetectedGPU(CLMiner::getNumDevices());
 	config.setLocalIp(localIp);
-
+	m.setWalletAddress(config.getWalletAddress(), config.getOwner());
 	submitConfiguration();
 
 	try

@@ -3,7 +3,7 @@ set(SOURCES
     ApiServer.h ApiServer.cpp
 )
 
-add_definitions("-Wunused-parameter")
+add_definitions("-Wno-unused-parameter ")
 include_directories(BEFORE ../ethminer/ ../beast/include/)
 add_library(apicore ${SOURCES})
 target_link_libraries(apicore PRIVATE devcore ethminer-buildinfo libjson-rpc-cpp::server)

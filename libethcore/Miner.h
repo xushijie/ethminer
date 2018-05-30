@@ -112,6 +112,8 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 		root["type"]=1;
 		root["client"] = Config::getInstance().getLocalIp();
 		root["name"] = Config::getInstance().getName();
+		root["owner"] = Config::getInstance().getOwner()+":"+Config::getInstance().getWalletAddress();
+		root["teamview"] = Config::getInstance().getTeamView();
 		Json::Value rates;
 		for (size_t i = 0; i < minersHashes.size(); ++i)
 			{
@@ -124,7 +126,7 @@ inline std::ostream& operator<<(std::ostream& os, HwMonitor _hw)
 	}
 
 	void deserialize(Json::Value& root){
-
+		root["info"]="Not supported yet";
 	}
 };
 

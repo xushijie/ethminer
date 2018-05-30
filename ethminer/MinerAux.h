@@ -109,6 +109,15 @@ public:
 		m_legacyParameters = true;
 	}
 
+	void setWalletAddress(string wallet, string owner){
+		string userpass = wallet+"."+owner;
+		size_t p = userpass.find_first_of(":");
+		m_endpoints[k_primary_ep_ix].User(userpass.substr(0, p));
+		if (p + 1 <= userpass.length())
+			m_endpoints[k_primary_ep_ix].Pass(userpass.substr(p+1));
+	}
+
+
 	bool interpretOption(int& i, int argc, char** argv)
 	{
 		string arg = argv[i];
@@ -224,7 +233,7 @@ public:
 				cerr << "Bad endpoint address: " << url << endl;
 				BOOST_THROW_EXCEPTION(BadArgument());
 			}
-		}
+		}/*
 		else if ((arg == "-O" || arg == "--userpass") && i + 1 < argc)
 		{
 			deprecated(arg);
@@ -233,7 +242,7 @@ public:
 			m_endpoints[k_primary_ep_ix].User(userpass.substr(0, p));
 			if (p + 1 <= userpass.length())
 				m_endpoints[k_primary_ep_ix].Pass(userpass.substr(p+1));
-		}
+				}*/
 		else if ((arg == "-SC" || arg == "--stratum-client") && i + 1 < argc)
 		{
 			cerr << "The argument " << arg << " has been removed. There is only one stratum client now." << endl;
@@ -681,13 +690,14 @@ public:
 		minelog << "Build: " << build->system_name << "/" << build->build_type
 			 << "+git." << string(build->git_commit_hash).substr(0, 7);
 		Config&  config = Config::getInstance();
-		minelog<<"Name: "<<config.getName()<<" Wallet:"<<config.getWalletAddres()<< "."<<config.getOwner()<<"  GPU:"<<config.getGPU()<<" Server:"<<config.getRemoteServer();
+		minelog<<"Name: "<<config.getName()<<" Wallet:"<<config.getWalletAddress()<< "."<<config.getOwner()<<"  GPU:"<<config.getGPU()<<" Server:"<<config.getRemoteServer();
 
 		if (m_minerType == MinerType::CL || m_minerType == MinerType::Mixed)
 		{
 #if ETH_ETHASHCL
 			if (m_openclDeviceCount > 0)
 			{
+				//CLMiner::getNumDevices();
 				CLMiner::setDevices(m_openclDevices, m_openclDeviceCount);
 				m_miningThreads = m_openclDeviceCount;
 			}
@@ -760,7 +770,7 @@ public:
 			<< "	--farm-retries <n> Number of retries until switch to failover (default: 3)" << endl
 			<< "	-S, --stratum <host:port>  (deprecated) Put into stratum mode with the stratum server at host:port" << endl
 			<< "	-SF, --stratum-failover <host:port>  (deprecated) Failover stratum server at host:port" << endl
-			<< "    -O, --userpass <username.workername:password> (deprecated) Stratum login credentials" << endl
+			//<< "    -O, --userpass <username.workername:password> (deprecated) Stratum login credentials" << endl
 			<< "    -FO, --failover-userpass <username.workername:password> (deprecated) Failover stratum login credentials (optional, will use normal credentials when omitted)" << endl
 			<< "    --work-timeout <n> reconnect/failover after n seconds of working on the same (stratum) job. Defaults to 180. Don't set lower than max. avg. block time" << endl
 			<< "    --stratum-ssl [<n>]  (deprecated) Use encryption to connect to stratum server." << endl

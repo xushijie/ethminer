@@ -57,7 +57,7 @@ function(configureProject)
 	endif()
 endfunction()
 
-add_definitions("-Wunused-parameter")
+add_definitions("-Wno-unused-parameter ")
 #find_package(Boost 1.66.0 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 
 hunter_add_package(Boost COMPONENTS system)
