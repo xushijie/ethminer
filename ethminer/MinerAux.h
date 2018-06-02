@@ -931,7 +931,14 @@ private:
 
 		string json;
 		CJsonSerializerAPI::serialize(&p, json);
-		HttpApi::postData(json);
+		bool ret = HttpApi::postData(json);
+		if(!ret){
+			Config&  config = Config::getInstance();
+			Json::Value root;
+			config.initJson(root);
+			//string json = JSonUtil::map2json(map);
+			HttpApi::postData(JSonUtil::json2string(root));
+		}
 	}
 
 
