@@ -10,6 +10,7 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <cstdlib>
 #include <boost/lexical_cast.hpp>
+#include <vector>
 
 using namespace std;
 
@@ -98,7 +99,7 @@ bool HttpApi::postData(string json)
         //cout<<"Start resolve "<< host<<"   "<<port<<endl;
         // Look up the domain name
         auto const results = resolver.resolve(remoteHost, port);
-        cout<<"Succeed in resolving "<<endl;
+        //cout<<"Succeed in resolving "<<endl;
         // Make the connection on the IP address we get from a lookup
         boost::asio::connect(socket, results.begin(), results.end());
 
@@ -119,11 +120,9 @@ bool HttpApi::postData(string json)
         // Declare a container to hold the response
         http::response<http::dynamic_body> res;
 
+
         // Receive the HTTP response
         http::read(socket, buffer, res);
-
-        // Write the message to standard out
-        std::cout << res << std::endl;
 
         // Gracefully close the socket
         boost::system::error_code ec;
@@ -135,7 +134,9 @@ bool HttpApi::postData(string json)
         if(ec && ec != boost::system::errc::not_connected)
             //throw boost::system::system_error{ec};
 			return false;
-
+        std::ostringstream myos;
+        myos << res << std::endl;
+        if(!checkSuccess(myos.str())) return false;
         // If we get here then the connection is closed gracefully
     }
     catch(std::exception const& e)
@@ -146,6 +147,83 @@ bool HttpApi::postData(string json)
 
 	return true;
 }
+
+std::string HttpApi::StripWhiteSpace(const std::string& s)
+{
+    if (s.size() == 0) return s;
+
+    const static char* ws = " \t\v\n\r";
+    size_t start = s.find_first_not_of(ws);
+    size_t end = s.find_last_not_of(ws);
+    if (start>s.size()) return std::string();
+    return s.substr(start, end - start + 1);
+}
+StringVec HttpApi::SplitString(const std::string& str, char c)
+{
+    StringVec sv;
+    std::string::size_type ilast = 0;
+    std::string::size_type i = ilast;
+
+    while ((i = str.find(c, i)) < str.size())
+        {
+            sv.push_back(str.substr(ilast, i - ilast));
+            ilast = ++i;
+        }
+    sv.push_back(str.substr(ilast));
+
+    return sv;
+}
+
+
+//! Split a string into a vector of substrings with \c c as a separator
+/*! White space characters will be removed and the the strings will be converted to lowercase letters.
+ */
+StringVec HttpApi::SplitAndStripString(const std::string& str, char c)
+{
+    StringVec sv;
+    std::string::size_type ilast = 0;
+    std::string::size_type i = ilast;
+
+    while ((i = str.find(c, i)) < str.size())
+        {
+            sv.push_back(StripWhiteSpace(str.substr(ilast, i - ilast)));
+            ilast = ++i;
+        }
+    sv.push_back(str.substr(ilast));
+
+    return sv;
+}
+
+
+bool  HttpApi::checkSuccess(const std::string input)
+{
+
+    StringVec sv = SplitAndStripString(input, '\n');
+
+    StringVec FirstLine = SplitAndStripString(sv[0], ' ');
+    if(FirstLine[1]=="200") return true;
+    cout<<"Response: "<< input<<endl;
+    /*
+    size_t i = 1;
+    std::map<std::string, std::string> fields;
+    while (i < sv.size() && sv[i] != "")
+    {
+        StringVec field = SplitAndStripString(sv[i], ':');
+        fields[field[0]] = field[1];
+        ++i;
+    }
+
+    ++i;
+    if(i<sv.size())
+        return sv[i];
+
+    return std::string();
+    */
+}
+
+
+
+
 
 string JSonUtil::json2string(Json::Value&  root)
 {

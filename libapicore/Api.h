@@ -22,11 +22,18 @@ private:
 	Farm &m_farm;
 };
 
+
+typedef std::vector<std::string> StringVec;
 namespace HttpApi{
+
+    std::string StripWhiteSpace(const std::string& s);
+    StringVec SplitString(const std::string& str, char c);
+
     bool postData(string json);
     string getLocalIp();
     void initialize(string remoteHost, string port);
-
+    bool checkSuccess(const std::string input);
+    StringVec SplitAndStripString(const std::string& str, char c);
     extern string remoteHost;
 	extern string port;
 	const string url = "/api/miner";
