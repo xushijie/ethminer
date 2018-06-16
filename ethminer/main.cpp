@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 
 	Config&  config = Config::getInstance();
 	cout<<"Start loading configuration "<<endl;
-	config.loadConfig("config.ini");
+	config.loadConfig(m.getConfigFile());
 	HttpApi::initialize(config.getRemoteServer(), config.getPort());
 	string localIp = HttpApi::getLocalIp();
 	config.setDetectedGPU(CLMiner::getNumDevices());

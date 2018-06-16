@@ -243,6 +243,10 @@ public:
 			if (p + 1 <= userpass.length())
 				m_endpoints[k_primary_ep_ix].Pass(userpass.substr(p+1));
 				}*/
+		else if((arg=="-o") && i+1 < argc)
+			{
+				config_file = string(argv[++i]);
+			}
 		else if ((arg == "-SC" || arg == "--stratum-client") && i + 1 < argc)
 		{
 			cerr << "The argument " << arg << " has been removed. There is only one stratum client now." << endl;
@@ -670,6 +674,10 @@ public:
 		return true;
 	}
 
+	string getConfigFile()
+	{
+		return config_file;
+	}
 	void execute()
 	{
 		if (m_shouldListDevices)
@@ -1078,6 +1086,7 @@ private:
 	bool m_legacyParameters = false;
 	bool m_newParameters = false;
 
+	string config_file;
 #if ETH_DBUS
 	DBusInt dbusint;
 #endif
